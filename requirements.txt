@@ -1,9 +1,8 @@
-streamlit
+streamlit==1.32.2
 openai
-langchain
-langchain-community
-faiss-cpu
+langchain==0.1.20
+langchain-community==0.0.38
+faiss-cpu==1.7.4
 tiktoken
 feedparser
 beautifulsoup4
-langchain-text-splitters
