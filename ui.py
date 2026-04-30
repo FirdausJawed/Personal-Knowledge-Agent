@@ -18,7 +18,7 @@ st.set_page_config(page_title="KnowledgeOS", layout="wide")
 st.markdown("""
 # Firdaus Medium Notes  
 
-#### This AI is trained on my Medium articles — [Read my Medium blogs](https://medium.com/@firdaus-jawed) 
+#### This AI is trained on my Medium articles — [Medium blogs](https://medium.com/@firdaus-jawed) 
 
 This AI is trained on my personal articles about Java & Spring Boot, System Design & Backend Interviews, Debugging & Performance, My SDE1 → SDE2 journey  
 
