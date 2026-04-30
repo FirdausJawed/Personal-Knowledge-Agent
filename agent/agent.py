@@ -20,24 +20,35 @@ def decide_action(query):
 
 
 def generate_answer(query, context):
-    joined_context = "\n".join(context)
+    formatted_context = ""
+
+    sources = set()
+
+    for item in context:
+        formatted_context += f"""
+        Title: {item['title']}
+        Content: {item['content']}
+        Link: {item['link']}
+        """
+
+        sources.add((item["title"], item["link"]))
 
     prompt = f"""
     Answer the question using the context below.
 
     Context:
-    {joined_context}
+    {formatted_context}
 
     Question:
     {query}
 
-    Format your response as:
+    Format:
 
     Answer:
-    <clear, structured answer>
+    <clear structured answer>
 
     Sources:
-    - short references from context
+    - Title (Link)
     """
 
     response = client.chat.completions.create(
@@ -47,18 +58,18 @@ def generate_answer(query, context):
 
     return response.choices[0].message.content
 
-
 def run_agent(query, db):
     action = decide_action(query)
 
-    # always retrieve context first
     context = retrieve(db, query)
 
     if action == "rag":
         return generate_answer(query, context)
 
     elif action == "summarize":
-        return summarize("\n".join(context))
+        clean_text = "\n".join([item["content"] for item in context])
+        return summarize(clean_text)
 
     elif action == "blog":
-        return generate_blog("\n".join(context))
+        clean_text = "\n".join([item["content"] for item in context])
+        return generate_blog(clean_text)

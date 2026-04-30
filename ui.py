@@ -1,31 +1,54 @@
 import streamlit as st
-from ingestion.load_data import load_data
+from ingestion.medium_loader import load_medium_posts
 from retrieval.vector_store import create_vector_store
 from agent.agent import run_agent
 
-# Load data once
+# ---------------- SETUP ---------------- #
 @st.cache_resource
 def setup():
-    text = load_data("data/blogs.txt")
-    db = create_vector_store(text)
+    docs = load_medium_posts("https://medium.com/feed/@firdaus-jawed")
+    db = create_vector_store(docs)
     return db
 
 db = setup()
 
-st.set_page_config(page_title="Knowledge Agent", layout="wide")
+# ---------------- UI CONFIG ---------------- #
+st.set_page_config(page_title="KnowledgeOS", layout="wide")
 
-st.title("🧠 Personal Knowledge Agent")
-st.write("Ask questions, summarize, or generate blogs from your knowledge.")
+st.markdown("""
+# Firdaus Medium Notes  
 
-# Input box
-query = st.text_input("Enter your question:")
+#### This AI is trained on my Medium articles — [Read my Medium blogs](https://medium.com/@firdaus-jawed) 
 
-if st.button("Run Agent"):
-    if query:
+This AI is trained on my personal articles about Java & Spring Boot, System Design & Backend Interviews, Debugging & Performance, My SDE1 → SDE2 journey  
+
+💡 Ask it to Explain concepts I’ve written about (Java, Springboot, SDE1 -> SDE2) and to summarize my blogs  
+
+""")
+
+# ---------------- CHAT STATE ---------------- #
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# ---------------- DISPLAY CHAT ---------------- #
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.markdown(msg["content"])
+
+# ---------------- INPUT ---------------- #
+prompt = st.chat_input("Ask anything about your knowledge...")
+
+if prompt:
+    # show user message
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    # generate response
+    with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            response = run_agent(query, db)
-        
-        st.subheader("Response:")
-        st.markdown(response)
-    else:
-        st.warning("Please enter a query.")
+            response = run_agent(prompt, db)
+            st.markdown(response)
+
+    # store response
+    st.session_state.messages.append({"role": "assistant", "content": response})
