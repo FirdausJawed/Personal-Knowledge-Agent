@@ -1,0 +1,171 @@
+The Java Cheat Sheet That Helped Me Move from SDE-1 to SDE-2
+What I actually prepared while cracking Java backend interviews at Paytm, Swiggy, Blinkit - and doubling my CTC in 1.5 years
+I switched from Flipkart as an SDE-1 to Oracle as an SDE-2 and doubled my CTC in just 1.5 years of experience. During that switch, I cracked multiple Java backend interviews across companies like Paytm, Swiggy, Blinkit, and a few other start ups like superAGI and Mojro before finally choosing Oracle.
+Non medium members, I got you, read it for free here
+image by authorBetween end of November 2025 and early January 2026, I was actively interviewing. That matters, because it means I've seen the current interview patterns - not outdated prep advice or recycled questions from years ago.
+Here's what I learned the hard way.
+Interviewers today don't care if you remember method signatures or definitions. They use Java questions as a lens to evaluate how you think about memory, performance, concurrency, and production trade-offs.
+
+---
+
+Before any interview, the resume is the first filter. I iterated on mine multiple times during the switch until it consistently started converting applications into calls. I eventually turned that exact structure into a reusable template:
+The ATS-Friendly Resume That Got Me Interview Calls (SDE Editable Template)
+If you've ever: Applied to 50+ roles and heard nothing back Got rejected without even a screening call Been told "your…firdaus367.gumroad.com
+
+---
+
+1. Garbage Collection (GC)
+Don't start with algorithms. Start with intent.
+What interviewers really want to hear:
+Why GC exists and what problem it solves in real systems.
+GC exists so developers don't manually manage memory and accidentally crash long-running services with leaks or dangling references. In backend systems, that safety matters more than raw performance.
+Once you've said that, then talk about how it works:
+Objects get allocated on the heap
+Reachability decides whether an object is alive
+Collectors reclaim unused memory
+
+Now pause and ask yourself:
+👉 Can you explain why GC tuning matters in high-traffic services?
+Follow-up they might ask:
+Why would a poorly tuned GC cause latency spikes even if CPU usage looks fine?
+If you can answer that, you're thinking like an SDE-2 already.
+
+---
+
+2. HashMap Internals (This One Decides Interviews)
+HashMap questions are never random.
+Interviewers ask them because HashMap exposes how you reason about performance under collision.
+You should be able to walk through:
+How key → hash → bucket mapping works
+What happens during collisions
+Why Java introduced treeification
+
+But here's the real signal:
+Treeification doesn't happen immediately. It happens only after a collision threshold and minimum capacity.
+That detail separates memorization from understanding.
+Now think about this:
+👉 In a high-traffic API, what kind of bug could cause excessive HashMap collisions even with a large capacity?
+If you say poor hashCode implementation, you're on the right track.
+
+---
+
+3. Streams API (Lazy Execution Is the Hook)
+Most candidates say: Streams make code cleaner. That's weak.
+Streams exist to:
+Separate what you want from how it executes
+Enable lazy evaluation
+Allow internal optimizations
+
+You should clearly explain Why intermediate operations don't execute immediately, When execution actually starts, How map vs flatMap changes the data shape
+Try answering this:
+👉 When you chain filter → map → collect, at what exact point does iteration begin?
+If you hesitate here, revise streams again.
+
+---
+
+If you're seriously preparing for backend interviews and want to stop guessing your level, the fastest way is to test yourself the way interviews actually do.
+I've bundled the Java + Multithreading interview quizzes I created based on my own interview loops at Paytm, Swiggy, Blinkit, and Oracle - the same questions that helped me move from SDE-1 to SDE-2.
+👉 Check your interview readiness here:
+ Java + Multithreading Interview Calibration Quizzes
+Java & Multithreading Interview Quiz for SDE-1 → SDE-2
+If you're an SDE-1 or early SDE-2 backend engineer, you've probably felt this: You've "covered" Java, but interviews…firdaus367.gumroad.com
+
+---
+
+4. Functional Interfaces (Small Topic, Big Signal)
+This is a trap question.
+Interviewers don't care if you can define a functional interface. They care if you understand why Java needed it.
+Functional interfaces:
+Enable lambda expressions
+Allow behavior to be passed, not just data
+Make APIs like Streams possible
+
+Follow-up they might throw:
+👉 Why can't a functional interface have two abstract methods?
+Answering that cleanly shows conceptual clarity.
+
+---
+
+5. Object Copying (Shallow vs Deep)
+This one shows whether you've debugged real bugs.
+You must clearly explain:
+Shallow copy copies references
+Deep copy duplicates the object graph
+
+But don't stop there.
+Connect it to reality:
+👉 Why can shallow copies cause bugs in multi-threaded systems?
+If you mention shared mutable state, you're thinking correctly.
+
+---
+
+6. Strings (Immutability Is Not Just "Safety")
+Everyone says:
+Strings are immutable for security.
+That's incomplete.
+Immutability also Enables string pooling, Makes Strings thread-safe by design, Allows JVM optimizations
+You should confidently explain:
+What the String pool is
+How interning works
+Why == behaves differently from equals()
+
+Now answer this honestly:
+👉 In what real scenario would using == accidentally pass tests but fail in production?
+That's an interview-level follow-up.
+
+---
+
+7. OOP - Keep It Structured, Not Long
+Interviewers don't want essays here.
+State the four pillars:
+Encapsulation
+Abstraction
+Inheritance
+Polymorphism
+
+Then give one real backend example, not definitions.
+Example:
+Encapsulation prevents external services from mutating internal state directly.
+If you over-explain OOP, you sound junior. Structure beats verbosity.
+
+---
+
+How I Prepared (and What I Used)
+While preparing for my switch, I realized something early: random notes and scattered resources don't help once interviews reach a certain depth. What helped was forcing myself to prepare at the same depth interviewers were probing.
+That's what eventually led me to write down my own preparation material.
+My main focus was on Java interviews firstly so I wrote a detailed ebook of all the Java questions which were asked mostly during my interviews of companies like Paytm, Blinkit, Oracle, Flipkart, Swiggy etc.
+A Practical Java Interview Crash Course for Backend Engineers
+A Practical Java Interview Crash Course for Backend Engineers
+A Practical Java Interview Crash Course for Backend EngineersQuestions, Follow-ups, and the Thinking Behind Strong…firdaus367.gumroad.com
+It's essentially the longer, structured version of the Java section in this article - written for SDE-1s and early SDE-2s who already work in backend and want to avoid over-preparing the wrong things.
+It's essentially the longer, structured version of the Java section in this article - written for SDE-1s and early SDE-2s who already work in backend and want to avoid over-preparing the wrong things.
+As interviews progressed, the scope expanded beyond Java. System design, concurrency, databases, and interview framing started mattering more than raw problem-solving. That experience became the foundation for:
+The SDE-2 Interview Strategy
+The SDE1 -> SDE-2 Interview Strategy
+The SDE-2 Interview StrategyHow Backend Interviews Actually Evaluate EngineersMost engineers prepare for SDE-2…firdaus367.gumroad.com
+This is the same approach that helped me move from Flipkart (SDE-1) to Oracle (SDE-2) in about 1.5 years, while cracking interviews at companies like Paytm, Swiggy, and Blinkit, and doubling my CTC.
+One last thing that had a surprisingly high impact was my resume.
+Before any interview, the resume is the first filter. I iterated on mine multiple times during the switch until it consistently started converting applications into calls. I eventually turned that exact structure into a reusable template:
+Resume Template That Got Me Interview Calls
+The ATS-Friendly Resume That Got Me Interview Calls (SDE Editable Template)
+If you've ever: Applied to 50+ roles and heard nothing back Got rejected without even a screening call Been told "your…firdaus367.gumroad.com
+I'm sharing these not as mandatory resources, but because they're the same artifacts I used while navigating the current job market - and they might save you time if you're preparing with a similar goal.
+
+---
+
+Your next reads…
+Java Interview Questions which I was asked during SDE1 to SDE2 transition
+Frequently asked Java interview questions explained with clear, interview-ready answers and real-world context.levelup.gitconnected.com
+Multi threading interview questions which I was asked during my SDE1 to SDE2 transition
+Frequently asked Java multi-threading interview questions explained with clear, interview-ready answerslevelup.gitconnected.com
+Top 10 Database Interview Questions Asked in SDE-2 Backend Interviews
+SDE-1 to SDE-2: Database Interview Questions That Decide Your Backend Switchmedium.com
+System Design Interview Cheat Code that helped me upgrade SDE-1 ->SDE-2
+The design patterns and question patterns that actually decide SDE-2 interviewslevelup.gitconnected.com
+Most Important LLD Questions in 2026
+Practice the top 10 Low-Level Design interview questions for 2026 with step-by-step solutions using "The System Design…levelup.gitconnected.com
+How I switched from SDE1 to SDE2 in 1.5 years and doubled my CTC
+How I switched from SDE1 to SDE2 in 1.5 years and doubled my CTC The Preparation Strategy That Worked in Today's Market…faun.pub
+SpringBoot interview questions for early career seekers
+Don't Go to a Spring Boot Interview Without Reading This! Crack interviews with clear explanations, real code examples…faun.pub
+Keywords used: Java Interview, Backend Engineering, Software Engineer, Job Switch, SDE Interview, Java Backend, Career Growth
