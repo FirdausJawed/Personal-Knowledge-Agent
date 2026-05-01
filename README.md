@@ -8,9 +8,8 @@ Instead of generic LLM responses, this app retrieves context from my own article
 
 ## What this does
 
-- Ask questions based on my Medium content
-- Summarize my blogs
-- Generate new blog drafts from existing knowledge
+- Answers questions asked based on my Medium blog content
+- Summarize my medium blogs
 - Uses RAG (Retrieval-Augmented Generation) to reduce hallucinations
 
 ---
